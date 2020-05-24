@@ -28,15 +28,14 @@ function CheckClickOnFields() {
             if (e.button === 2) {
                 console.log('flag');
                 if (e.target.classList.contains("flagged")) {
-                    //e.target.classList.remove("flagged");
+                    e.target.classList.remove("flagged");
                     //e.target.style.background = "url(''static/img/open-field.png)";
-                    if (e.target.classList.contains("mine")) {
-                        // e.target.className = "field mine";
-                        e.target.classList.remove("flagged");
-
-                    } else {
-                        e.target.className = "field "
-                    }
+                    // if (e.target.classList.contains("mine")) {
+                    //     // e.target.className = "field mine";
+                    //     e.target.classList.remove("flagged");
+                    // } else {
+                    //     e.target.className = "field "
+                    // }
 
                 } else {
                     e.target.className += " flagged";
