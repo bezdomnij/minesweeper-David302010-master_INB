@@ -10,7 +10,7 @@ function init() {
 function CheckClickOnFields() {
     let elements = document.querySelectorAll(".game-field .row .field ");
 
-    // get dataset of mine fields
+    //added: get dataset of mine fields
     let mines = document.getElementsByClassName('field mine');
     let mineIndices = [];
     for (let i = 0; i < mines.length; i++) {
@@ -25,7 +25,7 @@ function CheckClickOnFields() {
             return false;
         });
         element.addEventListener('mousedown', function (e) {
-            // right click - insert/remove flag icon
+            //changed: right click action
             if (e.button === 2) {
                 console.log('flag');
                 if (e.target.classList.contains("flagged")) {
@@ -34,29 +34,33 @@ function CheckClickOnFields() {
                     e.target.className += " flagged";
                 }
             }
-            // left click -- open field
+            //changed: left click -- open field & get mines nearby
             if (e.button === 0) {
                 clickedCol = e.target.dataset.col;
                 clickedRow = e.target.dataset.row;
                 let nameOfClass = e.target.className;
                 console.log(nameOfClass);
+            //added: gets array of field contacts
                 let neighborhood = collectNeighbours(parseInt(clickedRow), parseInt(clickedCol));
                 console.table(neighborhood); // => list of direct contacts
+
                 if (nameOfClass == "field mine") {
                     console.log('mine');
                     e.target.className = "stepped-on-mine";
                 } else if (nameOfClass == "field ") {
                     e.target.className = "no-mine";
                     console.log(clickedRow + clickedCol);
+            //added: get count of nearby mines
                     let minesClose;
                     minesClose= getMinesNearby(mineIndices, neighborhood);
                     console.log(minesClose);
-                    e.target.innerText = minesClose;
+                    e.target.innerText = minesClose; // show number in field
                 }
             }
         });
     }
-    function collectNeighbours(row, col) {
+
+    function collectNeighbours(row, col) { // calculates neighbours of clicked field
         let neighbours = [];
         let left = col === 0 ? -1 : (col - 1);
         let right = col === 9 ? -1 : (col + 1);
@@ -81,8 +85,10 @@ function CheckClickOnFields() {
             neighbours.push([below.toString(), col.toString()]);
         }
         return neighbours;
-    }
-    function getMinesNearby(mines, neighbours) {
+        }
+
+    // should calculate the coords of the neighbors
+    function getMinesNearby(mines, neighbours) {// compares mine and neighbour addresses
         console.table(mines);
         console.table(neighbours);
         let minesClose = 0;
@@ -95,16 +101,8 @@ function CheckClickOnFields() {
         }
         return minesClose;
     }
-
 }
 
-// should calculate the coords of the neighbors
-function getMinesNearby() {
-
-    return
-
-
-}
 
 
 // should go through all the fields with mines, and check if it is the neighbor of the clicked field.
