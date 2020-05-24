@@ -25,43 +25,85 @@ function CheckClickOnFields() {
             return false;
         });
         element.addEventListener('mousedown', function (e) {
+            // right click - insert/remove flag icon
             if (e.button === 2) {
                 console.log('flag');
                 if (e.target.classList.contains("flagged")) {
                     e.target.classList.remove("flagged");
-                    //e.target.style.background = "url(''static/img/open-field.png)";
-                    // if (e.target.classList.contains("mine")) {
-                    //     // e.target.className = "field mine";
-                    //     e.target.classList.remove("flagged");
-                    // } else {
-                    //     e.target.className = "field "
-                    // }
-
                 } else {
                     e.target.className += " flagged";
                 }
             }
+            // left click -- open field
             if (e.button === 0) {
-                let classnm = e.target.className;
-                if (classnm == "field mine") {
-                    console.log('mine')
-                    // e.target.className = "stepped-on-mine";
-                    console.log(e.target.dataset.row, e.target.dataset.col,"lofasz")
-                } else if (classnm == "field ") {
+                clickedCol = e.target.dataset.col;
+                clickedRow = e.target.dataset.row;
+                let nameOfClass = e.target.className;
+                console.log(nameOfClass);
+                let neighborhood = collectNeighbours(parseInt(clickedRow), parseInt(clickedCol));
+                console.table(neighborhood); // => list of direct contacts
+                if (nameOfClass == "field mine") {
+                    console.log('mine');
+                    e.target.className = "stepped-on-mine";
+                } else if (nameOfClass == "field ") {
                     e.target.className = "no-mine";
-                    clickedCol = e.target.dataset.col;
-                    clickedRow = e.target.dataset.row;
-                    console.log(clickedRow + clickedCol)
-                    calculateNeighborCoord()
+                    console.log(clickedRow + clickedCol);
+                    let minesClose;
+                    minesClose= getMinesNearby(mineIndices, neighborhood);
+                    console.log(minesClose);
+                    e.target.innerText = minesClose;
                 }
             }
         });
     }
+    function collectNeighbours(row, col) {
+        let neighbours = [];
+        let left = col === 0 ? -1 : (col - 1);
+        let right = col === 9 ? -1 : (col + 1);
+        let above = row === 0 ? -1 : (row - 1);
+        let below = row === 9 ? -1 : (row + 1);
+        const sides = [left, right];
+        for(const side of sides) {
+            if (side >= 0) {
+                neighbours.push([row.toString(), side.toString()]);
+                if (above >= 0) {
+                    neighbours.push([above.toString(), side.toString()]);
+                }
+                if (below >= 0) {
+                    neighbours.push([below.toString(), side.toString()]);
+                }
+            }
+        }
+        if (above >= 0) {
+            neighbours.push([above.toString(), col.toString()]);
+        }
+        if (below >= 0) {
+            neighbours.push([below.toString(), col.toString()]);
+        }
+        return neighbours;
+    }
+    function getMinesNearby(mines, neighbours) {
+        console.table(mines);
+        console.table(neighbours);
+        let minesClose = 0;
+        for(let i=0; i<mines.length; i++) {
+            for (let j=0; j<neighbours.length; j++) {
+                if (mines[i][0] === neighbours[j][0] && mines[i][1] === neighbours[j][1]) {
+                    minesClose += 1;
+                }
+            }
+        }
+        return minesClose;
+    }
+
 }
 
 // should calculate the coords of the neighbors
-function calculateNeighborCoord() {
+function getMinesNearby() {
+
     return
+
+
 }
 
 
