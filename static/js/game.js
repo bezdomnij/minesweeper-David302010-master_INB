@@ -26,12 +26,12 @@ function CheckClickOnFields() {
         });
         element.addEventListener('mousedown', function (e) {
             //changed: right click action
-            if (e.button === 2) {
+            if (e.button === 2) { // toggles 'flagged' html class to change background (defined in css)
                 console.log('flag');
-                if (e.target.classList.contains("flagged")) {
+                if (e.target.classList.contains("flagged")) { // remove if it's there
                     e.target.classList.remove("flagged");
                 } else {
-                    e.target.className += " flagged";
+                    e.target.className += " flagged"; // add if it's not there
                 }
             }
             //changed: left click -- open field & get mines nearby
@@ -51,10 +51,10 @@ function CheckClickOnFields() {
                     e.target.className = "no-mine";
                     console.log(clickedRow + clickedCol);
             //added: get count of nearby mines
-                    let minesClose;
-                    minesClose= getMinesNearby(mineIndices, neighborhood);
-                    console.log(minesClose);
-                    e.target.innerText = minesClose; // show number in field
+                    let minesNearby;
+                    minesNearby= getMinesNearby(mineIndices, neighborhood);
+                    console.log(minesNearby);
+                    e.target.innerText = minesNearby; // show number in field
                 }
             }
         });
