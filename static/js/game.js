@@ -40,7 +40,7 @@ function CheckClickOnFields() {
                 clickedRow = e.target.dataset.row;
                 let nameOfClass = e.target.className;
                 console.log(nameOfClass);
-            //added: gets array of field contacts
+                //added: gets array of field contacts
                 let neighborhood = collectNeighbours(parseInt(clickedRow), parseInt(clickedCol));
                 console.table(neighborhood); // => list of direct contacts
 
@@ -50,11 +50,13 @@ function CheckClickOnFields() {
                 } else if (nameOfClass == "field ") {
                     e.target.className = "no-mine";
                     console.log(clickedRow + clickedCol);
-            //added: get count of nearby mines
+                    //added: get count of nearby mines
                     let minesNearby;
-                    minesNearby= getMinesNearby(mineIndices, neighborhood);
+                    minesNearby = getMinesNearby(mineIndices, neighborhood);
                     console.log(minesNearby);
-                    e.target.innerText = minesNearby; // show number in field
+                    if (minesNearby) {
+                        e.target.textContent = minesNearby; // show number in field
+                    }
                 }
             }
         });
@@ -67,7 +69,7 @@ function CheckClickOnFields() {
         let above = row === 0 ? -1 : (row - 1);
         let below = row === 9 ? -1 : (row + 1);
         const sides = [left, right];
-        for(const side of sides) {
+        for (const side of sides) {
             if (side >= 0) {
                 neighbours.push([row.toString(), side.toString()]);
                 if (above >= 0) {
@@ -85,24 +87,23 @@ function CheckClickOnFields() {
             neighbours.push([below.toString(), col.toString()]);
         }
         return neighbours;
-        }
+    }
 
     // should calculate the coords of the neighbors
     function getMinesNearby(mines, neighbours) {// compares mine and neighbour addresses
         console.table(mines);
         console.table(neighbours);
-        let minesClose = 0;
-        for(let i=0; i<mines.length; i++) {
-            for (let j=0; j<neighbours.length; j++) {
+        let minesNearby = 0;
+        for (let i = 0; i < mines.length; i++) {
+            for (let j = 0; j < neighbours.length; j++) {
                 if (mines[i][0] === neighbours[j][0] && mines[i][1] === neighbours[j][1]) {
-                    minesClose += 1;
+                    minesNearby += 1;
                 }
             }
         }
-        return minesClose;
+        return minesNearby;
     }
 }
-
 
 
 // should go through all the fields with mines, and check if it is the neighbor of the clicked field.
